@@ -38,7 +38,7 @@ public class Starter {
     static String resolveTemporalTarget() {
         return System.getProperty(
                 "temporal.target",
-                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "127.0.0.1:7234"));
+                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "localhost:7234"));
     }
 
     static String newWorkflowId() {
