@@ -12,9 +12,7 @@ public class SayHelloWorker {
 
     public static void main(String[] args) {
 
-        String target = System.getProperty(
-                "temporal.target",
-                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "127.0.0.1:7234"));
+        String target = resolveTemporalTarget();
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(
                 WorkflowServiceStubsOptions.newBuilder()
                         .setTarget(target)
@@ -30,6 +28,12 @@ public class SayHelloWorker {
 
         factory.start();
 
+    }
+
+    static String resolveTemporalTarget() {
+        return System.getProperty(
+                "temporal.target",
+                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "127.0.0.1:7234"));
     }
 
 }

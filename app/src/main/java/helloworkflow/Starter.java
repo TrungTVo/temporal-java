@@ -9,13 +9,12 @@ import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.util.Map;
 import java.util.UUID;
 
 public class Starter {
 
     public static void main(String[] args) {
-        String target = resolveTemporalTarget(System.getenv());
+        String target = resolveTemporalTarget();
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(
                 WorkflowServiceStubsOptions.newBuilder()
                         .setTarget(target)
@@ -36,10 +35,10 @@ public class Starter {
         service.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
     }
 
-    static String resolveTemporalTarget(Map<String, String> environment) {
+    static String resolveTemporalTarget() {
         return System.getProperty(
                 "temporal.target",
-                environment.getOrDefault("TEMPORAL_ADDRESS", "127.0.0.1:7234"));
+                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "127.0.0.1:7234"));
     }
 
     static String newWorkflowId() {
