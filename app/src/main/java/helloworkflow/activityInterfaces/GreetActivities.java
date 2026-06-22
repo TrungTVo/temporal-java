@@ -7,6 +7,6 @@ import io.temporal.activity.ActivityMethod;
 public interface GreetActivities {
 
     @ActivityMethod
-    String greet(String name);
+    String greet(String name, boolean shouldFail);
 
 }

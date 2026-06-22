@@ -7,5 +7,5 @@ import io.temporal.workflow.WorkflowMethod;
 public interface SayHelloWorkflow {
 
     @WorkflowMethod
-    String sayHello(String name);
+    String sayHello(String name, boolean shouldFail);
 }

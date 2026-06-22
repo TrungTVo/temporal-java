@@ -31,9 +31,7 @@ public class SayHelloWorker {
     }
 
     static String resolveTemporalTarget() {
-        return System.getProperty(
-                "temporal.target",
-                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "localhost:7234"));
+        return System.getProperty("temporalTarget");
     }
 
 }

@@ -3,17 +3,20 @@
  */
 package helloworkflow;
 
+import java.util.Map;
+
+import helloworkflow.common.Utils;
 import helloworkflow.workflowInterfaces.SayHelloWorkflow;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
-import java.util.UUID;
-
 public class Starter {
 
     public static void main(String[] args) {
+        Map<String, Object> options = Utils.parseArgs(args);
+        boolean shouldFail = (boolean) options.getOrDefault("shouldFail", false);
         String target = resolveTemporalTarget();
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(
                 WorkflowServiceStubsOptions.newBuilder()
@@ -25,10 +28,10 @@ public class Starter {
                 SayHelloWorkflow.class,
                 WorkflowOptions.newBuilder()
                         .setTaskQueue("my-task-queue")
-                        .setWorkflowId(newWorkflowId())
+                        .setWorkflowId("say-hello-workflow")
                         .build());
 
-        String result = workflow.sayHello("Temporal");
+        String result = workflow.sayHello("Trung Vo", shouldFail);
         System.out.println("Workflow result: " + result);
 
         service.shutdown();
@@ -36,12 +39,7 @@ public class Starter {
     }
 
     static String resolveTemporalTarget() {
-        return System.getProperty(
-                "temporal.target",
-                System.getenv().getOrDefault("TEMPORAL_ADDRESS", "localhost:7234"));
+        return System.getProperty("temporalTarget");
     }
 
-    static String newWorkflowId() {
-        return "say-hello-workflow-" + UUID.randomUUID();
-    }
 }

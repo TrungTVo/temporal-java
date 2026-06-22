@@ -4,15 +4,20 @@
 ```bash
 temporal server start-dev --ui-port 8233 --metrics-port 57271 --port 7234
 ```
+Default temporal service port is `7233`
 
 ## Run the Worker
 ```bash
-./gradlew runWorker
+./gradlew runWorker -PtemporalTarget=localhost:7234
 ```
 
 ## Run the Sample Workflow
 ```bash
-./gradlew runStarter
+./gradlew runStarter -PtemporalTarget=localhost:7234
+```
+To demonstrate `retries` and `failed` scenario, set the `shouldFail` flag to `true`:
+```bash
+./gradlew runStarter -PtemporalTarget=localhost:7234 --args="--shouldFail=true"
 ```
 
 ## Check workers list
