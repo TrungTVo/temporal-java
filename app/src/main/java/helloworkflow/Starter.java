@@ -31,11 +31,15 @@ public class Starter {
                         .setWorkflowId("say-hello-workflow")
                         .build());
 
-        String result = workflow.sayHello("Trung Vo", shouldFail);
-        System.out.println("Workflow result: " + result);
-
-        service.shutdown();
-        service.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
+        try {
+            String result = workflow.sayHello("Trung Vo", shouldFail);
+            System.out.println("Workflow result: " + result);
+        }
+        finally {
+            System.out.println("Shutting down Temporal service...");
+            service.shutdown();
+            service.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
+        }
     }
 
     static String resolveTemporalTarget() {
