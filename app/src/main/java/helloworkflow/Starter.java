@@ -32,6 +32,7 @@ public class Starter {
                         .build());
 
         try {
+            // synchronous workflow execution
             String result = workflow.sayHello("Trung Vo", shouldFail);
             System.out.println("Workflow result: " + result);
         }
