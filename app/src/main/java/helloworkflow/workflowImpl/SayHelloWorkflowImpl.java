@@ -7,6 +7,7 @@ import io.temporal.workflow.Workflow;
 import java.time.Duration;
 
 import helloworkflow.activityInterfaces.GreetActivities;
+import helloworkflow.common.models.SayHelloRequest;
 import helloworkflow.workflowInterfaces.SayHelloWorkflow;
 
 public class SayHelloWorkflowImpl implements SayHelloWorkflow {
@@ -22,8 +23,8 @@ public class SayHelloWorkflowImpl implements SayHelloWorkflow {
                     .build());
 
     @Override
-    public String sayHello(String name, boolean shouldFail) {
-        return activities.greet(name, shouldFail);
+    public String sayHello(SayHelloRequest request) {
+        return activities.greet(request.name(), request.shouldFail());
     }
 
 }

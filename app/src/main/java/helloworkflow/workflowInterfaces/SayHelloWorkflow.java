@@ -1,5 +1,6 @@
 package helloworkflow.workflowInterfaces;
 
+import helloworkflow.common.models.SayHelloRequest;
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
@@ -7,5 +8,5 @@ import io.temporal.workflow.WorkflowMethod;
 public interface SayHelloWorkflow {
 
     @WorkflowMethod
-    String sayHello(String name, boolean shouldFail);
+    String sayHello(SayHelloRequest request);
 }

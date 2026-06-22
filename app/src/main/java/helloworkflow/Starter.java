@@ -4,11 +4,16 @@
 package helloworkflow;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 
 import helloworkflow.common.Utils;
+import helloworkflow.common.models.SayHelloRequest;
 import helloworkflow.workflowInterfaces.SayHelloWorkflow;
+import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.client.WorkflowStub;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 
@@ -31,19 +36,40 @@ public class Starter {
                         .setWorkflowId("say-hello-workflow")
                         .build());
 
+        // asynchronous workflow execution
+        WorkflowExecution execution = WorkflowClient.start(workflow::sayHello, new SayHelloRequest("Trung Vo", shouldFail));
+        System.out.println("Started: " + execution.getWorkflowId() + ", with run ID: " + execution.getRunId());
+        CountDownLatch shutdownLatch = new CountDownLatch(1);
+
+        CompletableFuture<String> resultFuture = WorkflowStub.fromTyped(workflow)
+                .getResultAsync(String.class);
+
+        resultFuture.whenComplete((result, error) -> {
+            if (error != null) {
+                System.err.println("SayHelloWorkflow failed: ");
+                error.printStackTrace();
+            } else {
+                System.out.println("SayHelloWorkflow completed: " + result);
+            }
+            cleanUp(service);
+            shutdownLatch.countDown();
+        });
+
         try {
-            String result = workflow.sayHello("Trung Vo", shouldFail);
-            System.out.println("Workflow result: " + result);
-        }
-        finally {
-            System.out.println("Shutting down Temporal service...");
-            service.shutdown();
-            service.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
+            shutdownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     static String resolveTemporalTarget() {
         return System.getProperty("temporalTarget");
+    }
+
+    static void cleanUp(WorkflowServiceStubs service) {
+        System.out.println("Shutting down Temporal service...");
+        service.shutdown();
+        service.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS);
     }
 
 }
