@@ -39,6 +39,10 @@ public class SayHelloWorkflowImpl implements SayHelloWorkflow {
         }
     }
 
+    /**
+     * 1. A Query handler must NOT modify Workflow state.
+     * 2. CANNOT perform blocking operations such as executing an Activity
+     */
     @Override
     public String getGreetingStatus() {
         return greetingStatus;
