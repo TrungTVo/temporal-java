@@ -20,8 +20,22 @@ Represents an application that wants something done.
 - Connects to Temporal Server.
 - Creates a typed client-side workflow stub.
 - Starts a workflow.
+- Queries the workflow status while it is running.
 - Waits for the result.
 - Prints the result and exits.
+
+# Workflow query method
+
+`SayHelloWorkflow` also declares a read-only query:
+
+```java
+@QueryMethod
+String getGreetingStatus();
+```
+
+`SayHelloWorkflowImpl` updates an in-memory `greetingStatus` field as the workflow runs. While the activity is sleeping, `Starter` calls `workflow.getGreetingStatus()` and prints the current status.
+
+Queries do not change workflow state or append workflow history events. They are useful when a client wants to inspect the current state of a running workflow without sending a signal or waiting for completion.
 
 # `SayHelloWorker.java`: the worker process
 
