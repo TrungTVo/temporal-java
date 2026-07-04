@@ -47,7 +47,16 @@ public class Starter {
         System.out.println("3. Greeting status query: " + sayHelloWorkflow.getGreetingStatus());
 
         CountDownLatch shutdownLatch = new CountDownLatch(1);
+        sayHelloWorkflowResultListener(sayHelloWorkflow, service, shutdownLatch);
 
+        try {
+            shutdownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void sayHelloWorkflowResultListener(SayHelloWorkflow sayHelloWorkflow, WorkflowServiceStubs service, CountDownLatch shutdownLatch) {
         CompletableFuture<String> resultFuture = WorkflowStub.fromTyped(sayHelloWorkflow)
                 .getResultAsync(String.class);
 
@@ -62,12 +71,6 @@ public class Starter {
             cleanUp(service);
             shutdownLatch.countDown();
         });
-
-        try {
-            shutdownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     static String resolveTemporalTarget() {
