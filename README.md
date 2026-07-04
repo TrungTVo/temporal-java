@@ -29,3 +29,4 @@ temporal worker list --address localhost:7234 --namespace default
 
 - [`asynchronous-workflow`](https://github.com/TrungTVo/temporal-java/tree/asynchronous-workflow): Asynchronous workflow execution example.
 - [`query-message`](https://github.com/TrungTVo/temporal-java/tree/query-message): Use query message to read the current state of the workflow as it is running or after it has completed.
+- [`signal-message`](https://github.com/TrungTVo/temporal-java/tree/signal-message): Use signal message to send messages to a running workflow, etc...
