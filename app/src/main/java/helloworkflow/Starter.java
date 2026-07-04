@@ -40,8 +40,11 @@ public class Starter {
         WorkflowExecution execution = WorkflowClient.start(workflow::sayHello, new SayHelloRequest("Trung Vo", shouldFail));
         System.out.println("Started: " + execution.getWorkflowId() + ", with run ID: " + execution.getRunId());
         System.out.println("1. Greeting status query: " + workflow.getGreetingStatus());
-        pauseBeforeQueryAgain();
+        workflow.setGreetingStatus("Greeting is forced to be in progress now!");
+        pauseBeforeQueryAgain(3000);
         System.out.println("2. Greeting status query: " + workflow.getGreetingStatus());
+        pauseBeforeQueryAgain(8000);
+        System.out.println("3. Greeting status query: " + workflow.getGreetingStatus());
 
         CountDownLatch shutdownLatch = new CountDownLatch(1);
 
@@ -49,7 +52,7 @@ public class Starter {
                 .getResultAsync(String.class);
 
         resultFuture.whenComplete((result, error) -> {
-            System.out.println("3. Greeting status query: " + workflow.getGreetingStatus());
+            System.out.println("4. Greeting status query: " + workflow.getGreetingStatus());
             if (error != null) {
                 System.err.println("SayHelloWorkflow failed: ");
                 error.printStackTrace();
@@ -71,9 +74,9 @@ public class Starter {
         return System.getProperty("temporalTarget");
     }
 
-    static void pauseBeforeQueryAgain() {
+    static void pauseBeforeQueryAgain(long milis) {
         try {
-            Thread.sleep(11000);
+            Thread.sleep(milis);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Interrupted while waiting to query the workflow", e);
