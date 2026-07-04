@@ -1,6 +1,6 @@
-package helloworkflow.workflowInterfaces;
+package quickstart.workflowInterfaces;
 
-import helloworkflow.common.models.SayHelloRequest;
+import quickstart.common.models.SayHelloRequest;
 import io.temporal.workflow.QueryMethod;
 import io.temporal.workflow.SignalMethod;
 import io.temporal.workflow.WorkflowInterface;

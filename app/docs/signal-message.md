@@ -19,3 +19,24 @@ Output:
 3. Greeting status query: Greeting is in progress for Trung Vo.
 4. Greeting status query: Greeting completed/failed for Trung Vo.
 ```
+
+# Send Signal from one Workflow to external Workflow
+
+## 1. Start `CustomerOnboardWorkflow` first
+```bash
+./gradlew runCustomerOnboard -PtemporalTarget=localhost:7234
+```
+
+This workflow will wait until customer ID is NOT null
+```java
+Workflow.await(() -> this.customer.id() != null);
+```
+
+To make this happen, we will send a signal from `SayHelloWorkflow` to `CustomerOnboardWorkflow` to update the customer ID.
+
+## 2. Start `SayHelloWorkflow` with `invokeCustomerOnboardWorkflow` flag set to `true`
+```bash
+./gradlew runSayHello -PtemporalTarget=localhost:7234 --args="--invokeCustomerOnboardWorkflow=true"
+```
+
+Once `SayHelloWorkflow` is started, it will send a signal to `CustomerOnboardWorkflow` to update the customer ID. The `CustomerOnboardWorkflow` will then continue its execution and complete.

@@ -1,6 +1,6 @@
-package helloworkflow.activityImpl;
+package quickstart.activityImpl;
 
-import helloworkflow.activityInterfaces.GreetActivities;
+import quickstart.activityInterfaces.GreetActivities;
 
 public class GreetActivitiesImpl implements GreetActivities {
 

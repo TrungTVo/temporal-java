@@ -1,4 +1,4 @@
-package helloworkflow.workflowImpl;
+package quickstart.workflowImpl;
 
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
@@ -6,9 +6,10 @@ import io.temporal.workflow.Workflow;
 
 import java.time.Duration;
 
-import helloworkflow.activityInterfaces.GreetActivities;
-import helloworkflow.common.models.SayHelloRequest;
-import helloworkflow.workflowInterfaces.SayHelloWorkflow;
+import quickstart.activityInterfaces.GreetActivities;
+import quickstart.common.models.SayHelloRequest;
+import quickstart.workflowInterfaces.CustomerOnboardWorkflow;
+import quickstart.workflowInterfaces.SayHelloWorkflow;
 
 public class SayHelloWorkflowImpl implements SayHelloWorkflow {
 
@@ -26,6 +27,11 @@ public class SayHelloWorkflowImpl implements SayHelloWorkflow {
 
     @Override
     public String sayHello(SayHelloRequest request) {
+        if (request.invokeCustomerOnboardWorkflow()) {
+            CustomerOnboardWorkflow customerOnboardWorkflow = Workflow.newExternalWorkflowStub(CustomerOnboardWorkflow.class, "customer-onboard-workflow");
+            customerOnboardWorkflow.updateCustomerId("12345");
+        }
+
         Workflow.sleep(Duration.ofSeconds(10));
         greetingStatus = "Greeting is in progress for " + request.name() + ".";
         try {

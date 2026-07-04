@@ -11,11 +11,11 @@ Default temporal service port is `7233`
 ./gradlew runWorker -PtemporalTarget=localhost:7234
 ```
 
-## Run the Sample Workflow
+## Run the Sample `SayHelloWorkflow`
 ```bash
-./gradlew runStarter -PtemporalTarget=localhost:7234
+./gradlew runSayHello -PtemporalTarget=localhost:7234
 ```
-The starter starts the workflow asynchronously, then calls the workflow query method:
+The `StartSayHello` starts the workflow asynchronously, then calls the workflow query method:
 ```text
 Greeting status query: Greeting is in progress for Trung Vo.
 ```
@@ -23,7 +23,7 @@ This query is declared with `@QueryMethod` on the workflow interface. It reads w
 
 To demonstrate `retries` and `failed` scenario, set the `shouldFail` flag to `true`:
 ```bash
-./gradlew runStarter -PtemporalTarget=localhost:7234 --args="--shouldFail=true"
+./gradlew runSayHello -PtemporalTarget=localhost:7234 --args="--shouldFail=true"
 ```
 
 ## Check workers list

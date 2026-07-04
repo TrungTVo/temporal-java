@@ -1,13 +1,13 @@
 The key mental model is:
 - `Starter` asks Temporal to run work.
-- `SayHelloWorker` performs that work.
+- `MyWorker` performs that work.
 - The Temporal Server coordinates them.
 
 ```
 Starter
    │ starts workflow
    ▼
-Temporal Server ──task queue──► SayHelloWorker
+Temporal Server ──task queue──► MyWorker
                                    │
                                    ├─ runs workflow code
                                    └─ runs activity code
@@ -37,7 +37,7 @@ String getGreetingStatus();
 
 Queries do not change workflow state or append workflow history events. They are useful when a client wants to inspect the current state of a running workflow without sending a signal or waiting for completion.
 
-# `SayHelloWorker.java`: the worker process
+# `MyWorker.java`: the worker process
 
 Hosts your workflow and activity implementations.
 

@@ -1,4 +1,4 @@
-package helloworkflow.common;
+package quickstart.common;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

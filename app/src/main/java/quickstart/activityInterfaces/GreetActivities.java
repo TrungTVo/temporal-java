@@ -1,4 +1,4 @@
-package helloworkflow.activityInterfaces;
+package quickstart.activityInterfaces;
 
 import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;
