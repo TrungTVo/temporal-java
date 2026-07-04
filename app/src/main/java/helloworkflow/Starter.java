@@ -29,7 +29,7 @@ public class Starter {
                         .build());
         WorkflowClient client = WorkflowClient.newInstance(service);
 
-        SayHelloWorkflow workflow = client.newWorkflowStub(
+        SayHelloWorkflow sayHelloWorkflow = client.newWorkflowStub(
                 SayHelloWorkflow.class,
                 WorkflowOptions.newBuilder()
                         .setTaskQueue("my-task-queue")
@@ -37,22 +37,22 @@ public class Starter {
                         .build());
 
         // asynchronous workflow execution
-        WorkflowExecution execution = WorkflowClient.start(workflow::sayHello, new SayHelloRequest("Trung Vo", shouldFail));
+        WorkflowExecution execution = WorkflowClient.start(sayHelloWorkflow::sayHello, new SayHelloRequest("Trung Vo", shouldFail));
         System.out.println("Started: " + execution.getWorkflowId() + ", with run ID: " + execution.getRunId());
-        System.out.println("1. Greeting status query: " + workflow.getGreetingStatus());
-        workflow.setGreetingStatus("Greeting is forced to be in progress now!");
+        System.out.println("1. Greeting status query: " + sayHelloWorkflow.getGreetingStatus());
+        sayHelloWorkflow.setGreetingStatus("Greeting is forced to be in progress now!");
         pauseBeforeQueryAgain(3000);
-        System.out.println("2. Greeting status query: " + workflow.getGreetingStatus());
+        System.out.println("2. Greeting status query: " + sayHelloWorkflow.getGreetingStatus());
         pauseBeforeQueryAgain(8000);
-        System.out.println("3. Greeting status query: " + workflow.getGreetingStatus());
+        System.out.println("3. Greeting status query: " + sayHelloWorkflow.getGreetingStatus());
 
         CountDownLatch shutdownLatch = new CountDownLatch(1);
 
-        CompletableFuture<String> resultFuture = WorkflowStub.fromTyped(workflow)
+        CompletableFuture<String> resultFuture = WorkflowStub.fromTyped(sayHelloWorkflow)
                 .getResultAsync(String.class);
 
         resultFuture.whenComplete((result, error) -> {
-            System.out.println("4. Greeting status query: " + workflow.getGreetingStatus());
+            System.out.println("4. Greeting status query: " + sayHelloWorkflow.getGreetingStatus());
             if (error != null) {
                 System.err.println("SayHelloWorkflow failed: ");
                 error.printStackTrace();
